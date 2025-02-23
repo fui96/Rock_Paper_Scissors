@@ -26,6 +26,7 @@ public class RockPaperScissorsFrame extends JFrame {
     JPanel GameConsole;
 
 
+
     public RockPaperScissorsFrame() {
         int Width = (int) (screenSize.width * .85);
         int Height = (int) (screenSize.height * .85);
@@ -74,10 +75,6 @@ public class RockPaperScissorsFrame extends JFrame {
         ButtonPanel.add(RockButton);
         ButtonPanel.add(PaperButton);
         ButtonPanel.add(ScissorsButton);
-
-
-
-
 
     }
     public void CreateGameConsole() {
