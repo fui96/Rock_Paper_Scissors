@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Random;
@@ -9,69 +8,54 @@ public class RockPaperScissorsFrame extends JFrame {
     Dimension screenSize = tk.getScreenSize();
 
     //Panels
-
-    //Title Panel
-    JPanel TitlePanel;
-    JLabel TitleLabel;
-    //Main Panel
-    JPanel MainPanel;
-    //Game Window
-    JPanel GamePanel;
-    JPanel ComputerPanel;
-    JPanel PlayerPanel;
-    JPanel ButtonPanel;
-    JLabel ComputerLabel;
-    JLabel PlayerLabel;
-    JButton RockButton;
-    JButton PaperButton;
-    JButton ScissorsButton;
-    //Stat Panel
-    JPanel StatPanel;
-    JTextArea PlayerWinsArea;
-    JLabel PWinLabel;
-    JTextArea ComputerWinsArea;
-    JLabel CWinLabel;
-    JTextArea TieGames;
-    JLabel TieLabel;
-    //Win/Loss Console
-    JPanel GameConsole;
+    JPanel MainPanel,TitlePanel, MiddlePanel,GameContainer,ComputerPanel,PlayerPanel,ButtonPanel,StatPanel,GameConsole;
+    //Labels
+    JLabel TitleLabel,ComputerLabel,PlayerLabel, PWinLabel, CWinLabel, TieLabel;
+    //Buttons
+    JButton RockButton,PaperButton,ScissorsButton,QuitButton;
+    //TextAreas
     JTextArea GameConsoleArea;
     JScrollPane GameConsoleScrollPane;
     //Images
-    ImageIcon Rock;
-    ImageIcon Paper;
-    ImageIcon Scissors;
-    ImageIcon Blank;
+    ImageIcon Rock,Paper,Scissors,Blank;
 
+    int ComputerScore,PlayerScore,Ties = 0;
 
     public RockPaperScissorsFrame() {
 
-        //Creating the Window
+
+
+        //Images
         Rock = new ImageIcon("src/Asset 1.png");
         Paper = new ImageIcon("src/Asset 2.png");
         Scissors = new ImageIcon("src/Asset 3.png");
         Blank = new ImageIcon("src/Asset 4.png");
 
-        Border BlackLine = BorderFactory.createLineBorder(Color.BLACK);
-        int Width = (int) (screenSize.width * .85);
-        int Height = (int) (screenSize.height * .85);
-        MainPanel = new JPanel();
-        MainPanel.setLayout(new BoxLayout(MainPanel, BoxLayout.X_AXIS));
-        setSize(Width, Height);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Create Window
+        setLayout(new BorderLayout());
         setTitle("Rock Paper Scissors");
-        CreateGameConsole();
-        add(GameConsole, BorderLayout.SOUTH);
-        add(MainPanel, BorderLayout.CENTER);
+        int Width = (int) (screenSize.width * .75);
+        int Height = (int) (screenSize.height * .75);
+        setSize(Width,Height);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        //Create Panels
         CreateTitlePanel();
-        add(TitlePanel, BorderLayout.NORTH);
+        CreateMiddlePanel();
         CreateStatPanel();
-        MainPanel.add(StatPanel);
-        StatPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        CreateGamePanel();
-        MainPanel.add(GamePanel);
-        GamePanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        CreateGameConsole();
+
+
+        MainPanel = new JPanel();
+        add(MainPanel);
+        MainPanel.setLayout(new BorderLayout());
+        MainPanel.add(TitlePanel,BorderLayout.NORTH);
+        MainPanel.add(MiddlePanel,BorderLayout.CENTER);
+        MainPanel.add(GameConsole,BorderLayout.SOUTH);
+        GameContainer.add(GameConsole);
+
+
         setVisible(true);
 
         //Button Actions
@@ -90,63 +74,86 @@ public class RockPaperScissorsFrame extends JFrame {
 
     }
 
-    public void CreateGamePanel() {
-        GamePanel = new JPanel();
-        GamePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        GamePanel.setLayout(new BorderLayout());
+    public void CreateMiddlePanel() {
+        MiddlePanel = new JPanel();
+        MiddlePanel.setLayout(new BorderLayout());
+
+
+        GameContainer = new JPanel();
+        GameContainer.setLayout(new GridLayout(2,2));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,5,5,5);
+        //Computer Panel
         ComputerPanel = new JPanel();
         ComputerLabel = new JLabel("Computer",Blank,JLabel.CENTER);
         ComputerLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         ComputerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         ComputerPanel.add(ComputerLabel);
-        GamePanel.add(ComputerPanel, BorderLayout.WEST);
+
+
+        //Player Panel
         PlayerPanel = new JPanel();
         PlayerLabel = new JLabel("Player",Blank,JLabel.CENTER);
         PlayerLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         PlayerLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         PlayerPanel.add(PlayerLabel);
-        GamePanel.add(PlayerPanel, BorderLayout.EAST);
+
+
+        //Button Panel
         ButtonPanel = new JPanel();
         ButtonPanel.setLayout(new GridLayout(1, 3));
-        GamePanel.add(ButtonPanel, BorderLayout.SOUTH);
         RockButton = new JButton("Rock");
         PaperButton = new JButton("Paper");
         ScissorsButton = new JButton("Scissors");
         ButtonPanel.add(RockButton);
         ButtonPanel.add(PaperButton);
         ButtonPanel.add(ScissorsButton);
+
+
+        gbc.gridx = 0;
+        GameContainer.add(ComputerPanel,gbc);
+
+        GameContainer.add(PlayerPanel,gbc.gridx = 2, gbc.gridy = 0);
+        GameContainer.add(ButtonPanel,gbc.gridx = -1,gbc.gridy = 2);
+
+
+        MiddlePanel.add(GameContainer,BorderLayout.CENTER);
     }
     public void CreateGameConsole() {
         GameConsole = new JPanel();
         GameConsole.setLayout(new BorderLayout());
-        GameConsoleArea = new JTextArea(10,10);
+        GameConsoleArea = new JTextArea(5,5);
         GameConsoleArea.setEditable(false);
         GameConsoleScrollPane = new JScrollPane(GameConsoleArea);
         GameConsole.add(GameConsoleScrollPane, BorderLayout.CENTER);
+        GameConsoleScrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
     public void CreateStatPanel() {
         StatPanel = new JPanel();
-        StatPanel.setLayout(new GridLayout(6, 1));
-        PlayerWinsArea = new JTextArea(5,5);
-        ComputerWinsArea = new JTextArea(5,5);
-        TieGames = new JTextArea(5,5);
-        PWinLabel = new JLabel("Player Wins",JLabel.CENTER);
-        CWinLabel = new JLabel("Computer Wins",JLabel.CENTER);
-        TieLabel = new JLabel("Tie Games",JLabel.CENTER);
+        StatPanel.setLayout(new GridLayout(4, 1));
+        PWinLabel = new JLabel(("Player Wins: " + PlayerScore),JLabel.CENTER);
+        CWinLabel = new JLabel(("Computer Wins: " + ComputerScore),JLabel.CENTER);
+        TieLabel = new JLabel(("Tie Games: " + Ties),JLabel.CENTER);
+        PWinLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        CWinLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        TieLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        QuitButton = new JButton("Quit");
+        QuitButton.addActionListener((ActionEvent ae) -> System.exit(0));
         StatPanel.add(PWinLabel);
-        StatPanel.add(PlayerWinsArea);
         StatPanel.add(CWinLabel);
-        StatPanel.add(ComputerWinsArea);
         StatPanel.add(TieLabel);
-        StatPanel.add(TieGames);
+        StatPanel.add(QuitButton);
+        MiddlePanel.add(StatPanel,BorderLayout.WEST);
     }
     public String GameLogic(String PlayerMove) {
         String ComputerMove = GetComputerMove();
         ComputerIconChanger(ComputerMove);
         PlayerIconChanger(PlayerMove);
         if(PlayerMove.equals(ComputerMove)) {
-            return (PlayerMove + " is the same as " + ComputerMove + ", Tie Game!");
+            Ties++;
+            TieLabel.setText("Ties: " + Ties);
+            return (PlayerMove + " is the same as " + ComputerMove + ", Tie Game!\n");
         }
         //Player Wins
         if(
@@ -155,7 +162,9 @@ public class RockPaperScissorsFrame extends JFrame {
         (PlayerMove.equals("Paper") && ComputerMove.equals("Rock"))
         )
         {
-            return (PlayerMove + " Beats " + ComputerMove + ", Player Wins!");
+            PlayerScore++;
+            PWinLabel.setText("Player Wins: " + PlayerScore);
+            return (PlayerMove + " Beats " + ComputerMove + ", Player Wins!\n");
         }
         //ComputerWins
         else if(
@@ -163,7 +172,9 @@ public class RockPaperScissorsFrame extends JFrame {
         (PlayerMove.equals("Paper") && ComputerMove.equals("Scissors")) ||
         (PlayerMove.equals("Scissors") && ComputerMove.equals("Rock"))
         ){
-            return (ComputerMove + " Beats " + PlayerMove + ", Computer Wins!");
+            ComputerScore++;
+            CWinLabel.setText("Computer Wins: " + ComputerScore);
+            return (ComputerMove + " Beats " + PlayerMove + ", Computer Wins!\n");
 
         }
         else{
