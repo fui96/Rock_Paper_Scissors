@@ -8,6 +8,7 @@ public class RockPaperScissorsFrame extends JFrame {
     Dimension screenSize = tk.getScreenSize();
 
     //Panels
+
     JPanel MainPanel,TitlePanel, MiddlePanel,GameContainer,ComputerPanel,PlayerPanel,ButtonPanel,StatPanel,GameConsole;
     //Labels
     JLabel TitleLabel,ComputerLabel,PlayerLabel, PWinLabel, CWinLabel, TieLabel;
@@ -21,6 +22,9 @@ public class RockPaperScissorsFrame extends JFrame {
 
     int ComputerScore,PlayerScore,Ties = 0;
 
+    /**
+     * Main constructor for the frame and contains button events
+     */
     public RockPaperScissorsFrame() {
 
 
@@ -66,6 +70,10 @@ public class RockPaperScissorsFrame extends JFrame {
     }
 
     //Methods
+
+    /**
+     * Creates and structures the title for the window
+     */
     public void CreateTitlePanel(){
         TitlePanel = new JPanel();
         TitleLabel = new JLabel("Rock Paper Scissors");
@@ -74,6 +82,9 @@ public class RockPaperScissorsFrame extends JFrame {
 
     }
 
+    /**
+     * Creates and structures the GameArea nested in the Middle pane
+     */
     public void CreateMiddlePanel() {
         MiddlePanel = new JPanel();
         MiddlePanel.setLayout(new BorderLayout());
@@ -119,6 +130,10 @@ public class RockPaperScissorsFrame extends JFrame {
 
         MiddlePanel.add(GameContainer,BorderLayout.CENTER);
     }
+
+    /**
+     * Creates and structures the GameConsole pane
+     */
     public void CreateGameConsole() {
         GameConsole = new JPanel();
         GameConsole.setLayout(new BorderLayout());
@@ -129,6 +144,9 @@ public class RockPaperScissorsFrame extends JFrame {
         GameConsoleScrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
+    /**
+     * Creates and structures the Stats Panel
+     */
     public void CreateStatPanel() {
         StatPanel = new JPanel();
         StatPanel.setLayout(new GridLayout(4, 1));
@@ -146,6 +164,12 @@ public class RockPaperScissorsFrame extends JFrame {
         StatPanel.add(QuitButton);
         MiddlePanel.add(StatPanel,BorderLayout.WEST);
     }
+
+    /**
+     * Determines the winner of the game based on the players move
+     * @param PlayerMove the move selected by the user
+     * @return a string to append the GameConsoleScrollArea
+     */
     public String GameLogic(String PlayerMove) {
         String ComputerMove = GetComputerMove();
         ComputerIconChanger(ComputerMove);
@@ -182,6 +206,11 @@ public class RockPaperScissorsFrame extends JFrame {
         }
 
     }
+
+    /**
+     * randomly selects the computers move
+     * @return a string that is the random computer move
+     */
     public String GetComputerMove(){
         String ComputerMove = "";
         String[] Moves = {"Rock", "Paper", "Scissors"};
@@ -189,6 +218,11 @@ public class RockPaperScissorsFrame extends JFrame {
         ComputerMove = Moves[Rand.nextInt(Moves.length)];
         return ComputerMove;
     }
+
+    /**
+     * changes the icon in the player label
+     * @param PlayerMove uses the player move to decide which icon to change it to
+     */
     public void PlayerIconChanger(String PlayerMove){
         switch (PlayerMove) {
             case "Rock" -> PlayerLabel.setIcon(Rock);
@@ -196,6 +230,11 @@ public class RockPaperScissorsFrame extends JFrame {
             case "Scissors" -> PlayerLabel.setIcon(Scissors);
         }
     }
+
+    /**
+     * changes the icon for the computer label
+     * @param ComputerMove uses the computers move to decide the icon to change it to
+     */
     public void ComputerIconChanger(String ComputerMove){
         switch (ComputerMove) {
             case "Rock" -> ComputerLabel.setIcon(Rock);
